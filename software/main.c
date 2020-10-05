@@ -67,7 +67,7 @@ volatile uint16_t HC_counter;               // virtual 16-bit counter
 // shift out byte value to MAX7219
 void SEG_byte(uint8_t value) {
   for(uint8_t i=8; i; i--, value <<= 1) {   // shift out 8 bits, MSB first
-    PORTB &= ~(1<<DIN);                     // clear the bit first
+    PORTB &= ~(1<<DIN);                     // clear the bit first (saves some flash this way)
     if(value & 0x80) PORTB |= (1<<DIN);     // set bit if appropriate
     PORTB |=  (1<<CLK);                     // clock high -> shift out the bit
     PORTB &= ~(1<<CLK);                     // clock low (50ns < 1000 / 1.2)
@@ -139,7 +139,7 @@ ISR (PCINT0_vect) {
     TCCR0B = (1<<CS00);                     // start the timer
   } else {                                  // if falling edge on ECHO pin:
     TCCR0B = 0;                             // stop the timer
-    HC_done = 1;                            // set done flag
+    HC_done = 1;                            // set ranging complete flag
   }
 }
 
