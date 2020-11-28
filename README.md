@@ -1,6 +1,6 @@
 # TinySonar - Ultrasonic Range Finder
 
-TinySonar is an ultrasonic range finder based on the [ATtiny13A](http://ww1.microchip.com/downloads/en/devicedoc/doc8126.pdf), the ultrasonic ranging module [HC-SR04](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf) and a 7-digit display with a [MAX7219](https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf) driver IC.
+TinySonar is an ultrasonic range finder based on the [ATtiny13A](http://ww1.microchip.com/downloads/en/devicedoc/doc8126.pdf), the ultrasonic ranging module [HC-SR04](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf) and a 7-segment display with a [MAX7219](https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf) driver IC.
 
 ![pic.jpg](https://github.com/wagiminator/ATtiny13-TinySonar/blob/main/documentation/TinySonar_pic.jpg)
 
