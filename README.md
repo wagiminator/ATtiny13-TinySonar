@@ -139,3 +139,40 @@ int main(void) {
   }
 }
 ```
+
+# Compiling and Uploading
+
+If using the Arduino IDE:
+- Make sure you have installed [MicroCore](https://github.com/MCUdude/MicroCore).
+- Go to **Tools -> Board -> MicroCore** and select **ATtiny13**.
+- Go to **Tools** and choose the following board options:
+  - **Clock:**  1.2 MHz internal osc.
+  - **BOD:**    BOD 2.7V
+  - **Timing:** Micros disabled
+- Connect your programmer to your PC and to the ATtiny.
+- Go to **Tools -> Programmer** and select your ISP programmer (e.g. [USBasp](https://aliexpress.com/wholesale?SearchText=usbasp)).
+- Go to **Tools -> Burn Bootloader** to burn the fuses.
+- Open TinySonar.ino and click **Upload**.
+
+If using the precompiled hex-file (this may be a little different with Windows):
+- Make sure you have installed [avrdude](https://learn.adafruit.com/usbtinyisp/avrdude).
+- Connect your programmer to your PC and to the ATtiny.
+- Open a terminal.
+- Navigate to the folder with the hex-file.
+- Execute the following command (if necessary replace "usbasp" with the programmer you use):
+  ```
+  avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:main.hex
+  ```
+
+If using the makefile (Linux/Mac):
+- Make sure you have installed [avr-gcc toolchain and avrdude](http://maxembedded.com/2015/06/setting-up-avr-gcc-toolchain-on-linux-and-mac-os-x/).
+- Connect your programmer to your PC and to the ATtiny.
+- Open the makefile and change the programmer if you are not using usbasp.
+- Open a terminal.
+- Navigate to the folder with the makefile and main.c.
+- Run "make install" to compile, burn the fuses and upload the firmware.
+
+# References, Links and Notes
+1. [ATtiny13A Datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/doc8126.pdf)
+2. [HC-SR04 Datasheet](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf)
+3. [MAX7219 Datasheet](https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf)
