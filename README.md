@@ -2,20 +2,20 @@
 
 TinySonar is an ultrasonic range finder based on the [ATtiny13A](http://ww1.microchip.com/downloads/en/devicedoc/doc8126.pdf), the ultrasonic ranging module [HC-SR04](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf) and a 7-segment display with a [MAX7219](https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf) driver IC.
 
-![pic.jpg](https://github.com/wagiminator/ATtiny13-TinySonar/blob/main/documentation/TinySonar_pic.jpg)
+![pic.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinySonar/main/documentation/TinySonar_pic.jpg)
 
 # Hardware
 
 The wiring of the TinySonar is shown below:
 
-![wiring.png](https://github.com/wagiminator/ATtiny13-TinySonar/blob/main/documentation/TinySonar_Wiring.png)
+![wiring.png](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinySonar/main/documentation/TinySonar_Wiring.png)
 
 The ultrasonic ranging module HC-SR04 provides 2cm-400cm non-contact measurement function, the ranging accuracy can reach to 3mm. The module includes ultrasonic transmitter, receiver and control circuit.
 
 The MAX7219 is a compact, serial input/output common-cathode display drivers that interface microprocessors to 7-segment numeric LED displays of up to 8 digits, bar-graph displays, or 64 individual LEDs. Included on-chip are a BCD code-B decoder, multiplex scan circuitry, segment and digit drivers, and an 8x8 static RAM that stores each digit.
 
 # Software
-
+## Measuring the Distance with the HC-SR04
 This is how the HC-SR04 module is controlled:
 - start measurement by applying high signal on TRIG for at least 10us,
 - module automatically sends eight 40 kHz pulses and detects echos,
@@ -79,10 +79,11 @@ ISR (TIM0_OVF_vect) {
 }
 ```
 
+## Controlling the MAX7219 for the 7-Segment Display
 The distance in mm is shown on a 4-digit 7-segment display which is controlled via a MAX7219 in BCD decode mode. The SPI protocol is implemented with a simple bitbanging method. The MAX7219 is fast enough to be driven without delays even at the fastest clock speed of the ATtiny13. A transmission to the MAX7219 starts with pulling the CS line LOW. Afterwards two bytes are transmitted, the register address first and the register data second. The bytes are transmitted most significant bit first by setting the DIN line HIGH for a bit "1" or LOW for a bit "0" while the CLK line is LOW. The bit is shifted out on the rising edge of the CLK line. By setting the CS line HIGH again the end of the transmission is signified, the MAX7219 latches the two received bytes and writes the data byte into the register.
 
-![logic.png](https://github.com/wagiminator/ATtiny13-TinySonar/blob/main/documentation/TinySonar_Logic.png)
-![data.png](https://github.com/wagiminator/ATtiny13-TinySonar/blob/main/documentation/TinySonar_Data.png)
+![logic.png](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinySonar/main/documentation/TinySonar_Logic.png)
+![data.png](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinySonar/main/documentation/TinySonar_Data.png)
 
 ```c
 // pin definitions
@@ -125,6 +126,7 @@ void SEG_print(uint16_t number) {
 }
 ```
 
+## Main Function
 The main function is pretty simple:
 
 ```c
@@ -141,8 +143,7 @@ int main(void) {
 ```
 
 # Compiling and Uploading
-
-If using the Arduino IDE:
+## If using the Arduino IDE
 - Make sure you have installed [MicroCore](https://github.com/MCUdude/MicroCore).
 - Go to **Tools -> Board -> MicroCore** and select **ATtiny13**.
 - Go to **Tools** and choose the following board options:
@@ -154,7 +155,7 @@ If using the Arduino IDE:
 - Go to **Tools -> Burn Bootloader** to burn the fuses.
 - Open TinySonar.ino and click **Upload**.
 
-If using the precompiled hex-file (this may be a little different with Windows):
+## If using the precompiled hex-file
 - Make sure you have installed [avrdude](https://learn.adafruit.com/usbtinyisp/avrdude).
 - Connect your programmer to your PC and to the ATtiny.
 - Open a terminal.
@@ -164,7 +165,7 @@ If using the precompiled hex-file (this may be a little different with Windows):
   avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:main.hex
   ```
 
-If using the makefile (Linux/Mac):
+## If using the makefile (Linux/Mac)
 - Make sure you have installed [avr-gcc toolchain and avrdude](http://maxembedded.com/2015/06/setting-up-avr-gcc-toolchain-on-linux-and-mac-os-x/).
 - Connect your programmer to your PC and to the ATtiny.
 - Open the makefile and change the programmer if you are not using usbasp.
