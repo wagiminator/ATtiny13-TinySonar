@@ -142,8 +142,8 @@ int main(void) {
 }
 ```
 
-# Compiling and Uploading
-## If using the Arduino IDE
+## Compiling and Uploading
+### If using the Arduino IDE
 - Make sure you have installed [MicroCore](https://github.com/MCUdude/MicroCore).
 - Go to **Tools -> Board -> MicroCore** and select **ATtiny13**.
 - Go to **Tools** and choose the following board options:
@@ -155,7 +155,7 @@ int main(void) {
 - Go to **Tools -> Burn Bootloader** to burn the fuses.
 - Open TinySonar.ino and click **Upload**.
 
-## If using the precompiled hex-file
+### If using the precompiled hex-file
 - Make sure you have installed [avrdude](https://learn.adafruit.com/usbtinyisp/avrdude).
 - Connect your programmer to your PC and to the ATtiny.
 - Open a terminal.
@@ -165,7 +165,7 @@ int main(void) {
   avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:main.hex
   ```
 
-## If using the makefile (Linux/Mac)
+### If using the makefile (Linux/Mac)
 - Make sure you have installed [avr-gcc toolchain and avrdude](http://maxembedded.com/2015/06/setting-up-avr-gcc-toolchain-on-linux-and-mac-os-x/).
 - Connect your programmer to your PC and to the ATtiny.
 - Open the makefile and change the programmer if you are not using usbasp.
