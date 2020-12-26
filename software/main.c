@@ -54,17 +54,17 @@
 #include <util/delay.h>
 
 // pin definitions
-#define TRIG  PB0
-#define ECHO  PB4
-#define DIN   PB1
-#define CLK   PB2
-#define CS    PB3
+#define TRIG  PB0       // HC-SR04
+#define ECHO  PB4       // HC-SR04
+#define DIN   PB1       // MAX7219
+#define CLK   PB2       // MAX7219
+#define CS    PB3       // MAX7219
 
 // -----------------------------------------------------------------------------
 // MAX7219 7-Segment Display Implementation
 // -----------------------------------------------------------------------------
 
-// shift out byte value to MAX7219
+// MAX7219 shift out byte value
 void SEG_byte(uint8_t value) {
   for(uint8_t i=8; i; i--, value <<= 1) {   // shift out 8 bits, MSB first
     PORTB &= ~(1<<DIN);                     // clear the bit first (saves some flash this way)
@@ -74,7 +74,7 @@ void SEG_byte(uint8_t value) {
   }
 }
 
-// send command to MAX7219
+// MAX7219 send command
 void SEG_send(uint8_t reg, uint8_t data) {
   PORTB &= ~(1<<CS);                        // set CS low  -> select device
   SEG_byte(reg);                            // send address byte
@@ -82,12 +82,12 @@ void SEG_send(uint8_t reg, uint8_t data) {
   PORTB |= (1<<CS);                         // set CS high -> latch the bytes
 }
 
-// print a number on display
+// MAX7219 print a number on display
 void SEG_print(uint16_t number) {
   for(uint8_t i=1; i<5; i++, number /= 10) SEG_send(i, number % 10);
 }
 
-// init MAX7219
+// MAX7219 init
 void SEG_init(void) {
   DDRB  |= (1<<DIN) | (1<<CLK) | (1<<CS);   // set control pins as output
   PORTB |= (1<<CS);                         // pull high CS line
@@ -102,11 +102,11 @@ void SEG_init(void) {
 // HC-SR04 Ultrasonic Module Implementation
 // -----------------------------------------------------------------------------
 
-// global variables
+// HC-SR04 global variables
 volatile uint8_t  HC_done;                  // ranging complete flag
 volatile uint16_t HC_counter;               // virtual 16-bit counter
 
-// init HC-SR04
+// HC-SR04 init
 void HC_init(void) {
   DDRB  |= (1<<TRIG);                       // set TRIG pin as output
   PCMSK |= (1<<ECHO);                       // enable interrupt on ECHO pin
@@ -115,7 +115,7 @@ void HC_init(void) {
   sei();                                    // enable global interrupts
 }
 
-// get distance in mm from HC-SR04
+// HC-SR04 get distance in mm
 uint16_t HC_ping(void) {
   HC_done = 0;                              // reset ranging complete flag
   HC_counter = 0;                           // reset counter
