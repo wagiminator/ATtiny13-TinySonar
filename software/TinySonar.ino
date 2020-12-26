@@ -63,9 +63,9 @@
 #define CLK   PB2
 #define CS    PB3
 
-// global variables
-volatile uint8_t  HC_done;                  // ranging complete flag
-volatile uint16_t HC_counter;               // virtual 16-bit counter
+// -----------------------------------------------------------------------------
+// MAX7219 7-Segment Display Implementation
+// -----------------------------------------------------------------------------
 
 // shift out byte value to MAX7219
 void SEG_byte(uint8_t value) {
@@ -101,6 +101,14 @@ void SEG_init(void) {
   SEG_send(0x0f, 0x00);                     // display test off
 }
 
+// -----------------------------------------------------------------------------
+// HC-SR04 Ultrasonic Module Implementation
+// -----------------------------------------------------------------------------
+
+// global variables
+volatile uint8_t  HC_done;                  // ranging complete flag
+volatile uint16_t HC_counter;               // virtual 16-bit counter
+
 // init HC-SR04
 void HC_init(void) {
   DDRB  |= (1<<TRIG);                       // set TRIG pin as output
@@ -125,17 +133,6 @@ uint16_t HC_ping(void) {
   return(HC_counter / 7);                   // calculate and return distance
 }
 
-// main function
-int main(void) {
-  SEG_init();                               // setup MAX7219
-  HC_init();                                // setup HC-SR04
-
-  while(1) {
-    SEG_print(HC_ping());                   // get distance and print it on display
-    _delay_ms(200);                         // delay between pings
-  }
-}
-
 // pin change interrupt service routine
 ISR (PCINT0_vect) {
   if (PINB & (1<<ECHO)) {                   // if rising edge on ECHO pin:
@@ -149,4 +146,20 @@ ISR (PCINT0_vect) {
 // timer0 overflow interrupt service routine
 ISR (TIM0_OVF_vect) {
   HC_counter += 256;                        // increment 16-bit counter by 256 on each overflow
+}
+
+// -----------------------------------------------------------------------------
+// Main Function
+// -----------------------------------------------------------------------------
+
+int main(void) {
+  // setup
+  SEG_init();                               // setup MAX7219
+  HC_init();                                // setup HC-SR04
+
+  // loop
+  while(1) {
+    SEG_print(HC_ping());                   // get distance and print it on display
+    _delay_ms(200);                         // delay between pings
+  }
 }
